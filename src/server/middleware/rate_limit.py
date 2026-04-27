@@ -10,22 +10,26 @@ from slowapi.errors import RateLimitExceeded
 from ..config import config
 from ..models.errors import ErrorCode
 
-# Initialize rate limiter with Redis or in-memory storage
-# For now, use in-memory storage (can be upgraded to Redis later)
-limiter = Limiter(key_func=get_remote_address, storage_uri="memory://")
+# Limiter is created lazily to avoid spawning a background timer thread
+# on import in restricted Docker containers (can't start new thread).
+_limiter = None
+
+
+def _get_limiter() -> Limiter:
+    global _limiter
+    if _limiter is None:
+        _limiter = Limiter(key_func=get_remote_address, storage_uri="memory://")
+    return _limiter
 
 
 def rate_limit_middleware(app):
     """
     Setup rate limiting middleware for FastAPI app.
-    
-    Args:
-        app: FastAPI application instance
     """
     if not config.rate_limit_enabled:
         return
-    
-    app.state.limiter = limiter
+
+    app.state.limiter = _get_limiter()
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
