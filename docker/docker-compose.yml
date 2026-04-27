@@ -43,6 +43,7 @@ services:
       nproc: 65535
     volumes:
       - ./logs:/app/logs
+      - ./patches/rate_limit.py:/usr/local/lib/python3.11/site-packages/server/middleware/rate_limit.py:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/system/health"]
