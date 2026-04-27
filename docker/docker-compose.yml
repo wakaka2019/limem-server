@@ -36,8 +36,11 @@ services:
       - OCEANBASE_PASSWORD=${SEEKDB_ROOT_PASSWORD:-}
       - OCEANBASE_DATABASE=powermem
       - OCEANBASE_COLLECTION=memories
+      - OPENBLAS_NUM_THREADS=1
     env_file:
       - .env
+    ulimits:
+      nproc: 65535
     volumes:
       - ./logs:/app/logs
     restart: unless-stopped
