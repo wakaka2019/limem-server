@@ -4,6 +4,9 @@ networks:
   powermem-network:
     driver: bridge
     name: powermem-network
+    ipam:
+      config:
+        - subnet: 10.200.0.0/24
 
 services:
   powermem-server:
