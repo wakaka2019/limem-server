@@ -31,15 +31,14 @@ services:
       - POWERMEM_SERVER_CORS_ENABLED=${POWERMEM_SERVER_CORS_ENABLED:-true}
       - POWERMEM_SERVER_CORS_ORIGINS=${POWERMEM_SERVER_CORS_ORIGINS:-*}
       - POWERMEM_DATABASE_URL=${POWERMEM_DATABASE_URL:-}
-      # Database configuration for connecting to seekdb
-      # Use SEEKDB_ROOT_PASSWORD variable for unified password management
-      - DATABASE_PROVIDER=oceanbase
-      - OCEANBASE_HOST=seekdb
-      - OCEANBASE_PORT=2881
-      - OCEANBASE_USER=root@sys
-      - OCEANBASE_PASSWORD=${SEEKDB_ROOT_PASSWORD:-}
-      - OCEANBASE_DATABASE=powermem
-      - OCEANBASE_COLLECTION=memories
+      # Database — all values read from .env file, no hardcoded overrides
+      - DATABASE_PROVIDER=${DATABASE_PROVIDER:-oceanbase}
+      - OCEANBASE_HOST=${OCEANBASE_HOST:-seekdb}
+      - OCEANBASE_PORT=${OCEANBASE_PORT:-2881}
+      - OCEANBASE_USER=${OCEANBASE_USER:-root@sys}
+      - OCEANBASE_PASSWORD=${OCEANBASE_PASSWORD:-${SEEKDB_ROOT_PASSWORD:-}}
+      - OCEANBASE_DATABASE=${OCEANBASE_DATABASE:-powermem}
+      - OCEANBASE_COLLECTION=${OCEANBASE_COLLECTION:-memories}
       - OPENBLAS_NUM_THREADS=1
     env_file:
       - .env
