@@ -16,6 +16,7 @@ services:
     image: oceanbase/powermem-server:latest
     container_name: powermem-server
     privileged: true
+    user: "0"
     ports:
       - "${POWERMEM_SERVER_PORT:-8000}:8000"
     environment:
